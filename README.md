@@ -1,2 +1,2 @@
-# Universal_Libraries_Csharp
-Custom libraries for different  purpose.
+# Universal Libraries for C#
+### Custom libraries for different  purposes.
