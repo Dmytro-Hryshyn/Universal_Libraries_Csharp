@@ -21,12 +21,7 @@ namespace ModernUiDesign
             ToUnitName = toUnitName;
             ResultString = FromUnitName + "_" + toUnitName;
         }
-
-        // Mile per hour
-        // Feet per second
-        // Kilometre per hour
-        // Knot
-
+        
         public string GetUnswer()
         {
             Hashtable speedTable = new Hashtable();
@@ -70,7 +65,6 @@ namespace ModernUiDesign
             {
                 return "0";
             }
-
 
         }
 
