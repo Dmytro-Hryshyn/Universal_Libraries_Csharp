@@ -1,6 +1,9 @@
 ﻿
+using System;
+
 namespace ModernUiDesign
 {
+    
     interface IConverter
     {
         
@@ -9,7 +12,9 @@ namespace ModernUiDesign
         string ToUnitName { get; }
         string ResultString { get; }
 
-        string GetUnswer();
+         string GetUnswer();
        
+       //todo: Add delegate to this method
+
     }
 }
