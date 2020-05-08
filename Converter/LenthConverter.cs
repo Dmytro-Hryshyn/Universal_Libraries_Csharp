@@ -151,7 +151,7 @@ namespace ModernUiDesign
             lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Kilometre}", FromUnitValue / 39370m);
             lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Metres}", FromUnitValue / 39.37m);
             lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Centimetres}", FromUnitValue * 2.54m);
-            lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Centimetres}", FromUnitValue * 25.4m);
+            lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Millimetre}", FromUnitValue * 25.4m);
             lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Micrometre}", FromUnitValue * 25400m);
             lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Nanometre}", FromUnitValue * 2.54e+7m);
             lenthTable.Add($"{LenthUnits.Inch}-{LenthUnits.Mile}", FromUnitValue / 63360m);
