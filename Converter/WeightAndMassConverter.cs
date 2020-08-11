@@ -1,18 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace ModernUiDesign.Controls.Converter
+namespace Unit.Converter
 {
-    public class WeightAndMassConverter : IConverter
+    public class WeightAndMassConverter : BaseConverter , IConverter
     {
-        public decimal FromUnitValue { get; }
-
-        public string FromUnitName { get; }
-
-        public string ToUnitName { get; }
-
-        public string ResultString { get; }
-
+       
         enum WeightAndMassUnit
         {
             Tonne,
@@ -47,50 +40,19 @@ namespace ModernUiDesign.Controls.Converter
             return WeightAndMassDictinary;
         }
 
-        public WeightAndMassConverter(decimal fromUnitValue, string fromUnitName, string toUnitName)
+        public WeightAndMassConverter(decimal fromUnitValue, string fromUnit, string toUnit)
         {
             FromUnitValue = fromUnitValue;
-            FromUnitName = fromUnitName.Replace(" ", "_");
-            ToUnitName = toUnitName.Replace(" ", "_");
-            ResultString = $"{FromUnitName}-{ToUnitName}";
+            FromUnit = fromUnit.Replace(" ", "_");
+            ToUnit = toUnit.Replace(" ", "_");
+            FromUnit_ToUnit = $"{FromUnit}-{ToUnit}";
         }
 
-        public string GetUnswer()
+
+       
+       public Dictionary<string,decimal> CreateDictinary()
         {
-            var conversionUnit = GetConversionUnits();
-
-            if (conversionUnit.ContainsKey(ResultString))
-            {
-                return conversionUnit[ResultString].ToString();
-            }
-            else
-            {
-                return "0.error";
-            }
-
-        }
-
-        public decimal GetUnswer(ErrorCall errorCall, string ErrorText)
-        {
-            var conversionUnit = GetConversionUnits();
-            if (conversionUnit.ContainsKey(ResultString))
-            {
-                return (decimal)conversionUnit[ResultString];
-            }
-            else
-            {
-                errorCall?.Invoke(ErrorText);
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Populate Mass and Weight conversion unit one to enother
-        /// </summary>
-        /// <returns>returns Hastable with units</returns>
-        private Hashtable GetConversionUnits()
-        {
-            Hashtable UnitPairs = new Hashtable()
+            Dictionary<string,decimal> UnitPairs = new Dictionary<string, decimal>()
             {
                 // Tonne to others unit
                 {$"{WeightAndMassUnit.Tonne}-{WeightAndMassUnit.Kilogram}", FromUnitValue * 1000 },
@@ -204,5 +166,15 @@ namespace ModernUiDesign.Controls.Converter
             };
             return UnitPairs;
         }
+
+        public decimal ConvertUnit()
+        {
+            var WeightAndMassDictinary = CreateDictinary();
+            decimal keyIsMatched = 0;
+            WeightAndMassDictinary.TryGetValue(FromUnit_ToUnit, out keyIsMatched);
+            return keyIsMatched;
+        }
+
+       
     }
 }

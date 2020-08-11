@@ -1,103 +1,51 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 
-
-namespace ModernUiDesign.Controls.Converter
+namespace Unit.Converter
 {
-    public delegate void ErrorCall(string errormess);
 
-    public class TemperatureConverter : IConverter
+    public class TemperatureConverter : BaseConverter, IConverter
     {
-
-        public decimal FromUnitValue { get; }
-        public string FromUnitName { get; }
-        public string ToUnitName { get; }
-        public string ResultString { get; }
 
         public enum TemperatureUnit
         {
             Celsius,
             Fahrenheit,
             Kelvin,
-
         }
 
-        public TemperatureConverter(decimal fromUnitValue, string fromUnitName, string toUnitName)
+        public TemperatureConverter(decimal fromUnitValue, string fromUnit, string toUnit)
         {
             FromUnitValue = fromUnitValue;
-            FromUnitName = fromUnitName;
-            ToUnitName = toUnitName;
-            ResultString = $"{fromUnitName}-{toUnitName}";
+            FromUnit = fromUnit;
+            ToUnit = toUnit;
+            FromUnit_ToUnit = $"{fromUnit}-{toUnit}";
         }
 
-        /// <summary>
-        /// Searching for key in hash table, 
-        /// if key not found,  returns code arror = "0.error"
-        /// </summary>
-        /// <returns></returns>
-        public string GetUnswer()
+        public decimal ConvertUnit()
         {
-            Hashtable TemperatureHash = new Hashtable();
-
-            //Celsius to enother Unit
-            TemperatureHash.Add($"{TemperatureUnit.Celsius}-{TemperatureUnit.Fahrenheit}", (FromUnitValue * 9 / 5) + 32);
-            TemperatureHash.Add($"{TemperatureUnit.Celsius}-{TemperatureUnit.Kelvin}", FromUnitValue + 273.15m);
-
-            //Kelvin to enother Unit
-            TemperatureHash.Add($"{TemperatureUnit.Kelvin}-{TemperatureUnit.Celsius}", FromUnitValue - 273.15m);
-            TemperatureHash.Add($"{TemperatureUnit.Kelvin}-{TemperatureUnit.Fahrenheit}", (FromUnitValue - 273.15m) * 9 / 5 + 32);
-
-            //Fahrenheit to another Unit
-            TemperatureHash.Add($"{TemperatureUnit.Fahrenheit}-{TemperatureUnit.Celsius}", (FromUnitValue - 32) * 5 / 9);
-            TemperatureHash.Add($"{TemperatureUnit.Fahrenheit}-{TemperatureUnit.Kelvin}", (FromUnitValue - 32) * 5 / 9 + 273.15m);
-
-
-            if (TemperatureHash.ContainsKey(ResultString))
-            {
-                return TemperatureHash[ResultString].ToString();
-            }
-            else
-            {
-
-                return "0.error";
-            }
+            var keyValuePairs = CreateDictinary();
+            decimal keyisMatched = 0;
+            keyValuePairs.TryGetValue(FromUnit_ToUnit, out keyisMatched);
+            return keyisMatched;
         }
 
-
-        /// <summary>
-        /// If key not found, does call back whit delegate ErrorCall
-        /// </summary>
-        /// <param name="error"></param>
-        /// <param name="errormess"></param>
-        /// <returns></returns>
-        public string GetUnswer(ErrorCall error, string errormess)
+        public Dictionary<string, decimal> CreateDictinary()
         {
-            Hashtable TemperatureHash = new Hashtable();
+            Dictionary<string, decimal> TemperatureDictinary = new Dictionary<string, decimal>();
 
             //Celsius to enother Unit
-            TemperatureHash.Add($"{TemperatureUnit.Celsius}-{TemperatureUnit.Fahrenheit}", (FromUnitValue * 9 / 5) + 32);
-            TemperatureHash.Add($"{TemperatureUnit.Celsius}-{TemperatureUnit.Kelvin}", FromUnitValue + 273.15m);
+            TemperatureDictinary.Add($"{TemperatureUnit.Celsius}-{TemperatureUnit.Fahrenheit}", (FromUnitValue * 9 / 5) + 32);
+            TemperatureDictinary.Add($"{TemperatureUnit.Celsius}-{TemperatureUnit.Kelvin}", FromUnitValue + 273.15m);
 
             //Kelvin to enother Unit
-            TemperatureHash.Add($"{TemperatureUnit.Kelvin}-{TemperatureUnit.Celsius}", FromUnitValue - 273.15m);
-            TemperatureHash.Add($"{TemperatureUnit.Kelvin}-{TemperatureUnit.Fahrenheit}", (FromUnitValue - 273.15m) * 9 / 5 + 32);
+            TemperatureDictinary.Add($"{TemperatureUnit.Kelvin}-{TemperatureUnit.Celsius}", FromUnitValue - 273.15m);
+            TemperatureDictinary.Add($"{TemperatureUnit.Kelvin}-{TemperatureUnit.Fahrenheit}", (FromUnitValue - 273.15m) * 9 / 5 + 32);
 
-            //Fahrenheit to another Unit
-            TemperatureHash.Add($"{TemperatureUnit.Fahrenheit}-{TemperatureUnit.Celsius}", (FromUnitValue - 32) * 5 / 9);
-            TemperatureHash.Add($"{TemperatureUnit.Fahrenheit}-{TemperatureUnit.Kelvin}", (FromUnitValue - 32) * 5 / 9 + 273.15m);
-
-
-            if (TemperatureHash.ContainsKey(ResultString))
-            {
-                return TemperatureHash[ResultString].ToString();
-            }
-            else
-            {
-                error?.Invoke(errormess);
-                return string.Empty;
-            }
+            //Fahrenheit to other Unit
+            TemperatureDictinary.Add($"{TemperatureUnit.Fahrenheit}-{TemperatureUnit.Celsius}", (FromUnitValue - 32) * 5 / 9);
+            TemperatureDictinary.Add($"{TemperatureUnit.Fahrenheit}-{TemperatureUnit.Kelvin}", (FromUnitValue - 32) * 5 / 9 + 273.15m);
+            return TemperatureDictinary;
         }
     }
-
-
 }
 

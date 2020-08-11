@@ -1,20 +1,11 @@
-﻿
-using System;
+﻿using System.Collections.Generic;
 
-namespace ModernUiDesign
+namespace Unit.Converter
 {
-    
     interface IConverter
     {
-        
-        decimal FromUnitValue { get; }
-        string FromUnitName { get; }
-        string ToUnitName { get; }
-        string ResultString { get; }
+         public decimal ConvertUnit();
 
-         string GetUnswer();
-       
-       //todo: Add delegate to this method
-
+         public Dictionary<string, decimal> CreateDictinary();
     }
 }

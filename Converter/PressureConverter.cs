@@ -1,25 +1,15 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 
-namespace ModernUiDesign.Controls.Converter
+namespace Unit.Converter
 {
-    public class PressureConverter : IConverter
+    public class PressureConverter : BaseConverter, IConverter
     {
-
-
-        public decimal FromUnitValue { get; }
-
-        public string FromUnitName { get; }
-
-        public string ToUnitName { get; }
-
-        public string ResultString { get; }
-
-        public PressureConverter(decimal fromUnitValue, string fromUnitName, string toUnitName)
+        public PressureConverter(decimal fromUnitValue, string fromUnit, string toUnit)
         {
             FromUnitValue = fromUnitValue;
-            FromUnitName = fromUnitName;
-            ToUnitName = toUnitName;
-            ResultString = $"{FromUnitName}-{ToUnitName}";
+            FromUnit = fromUnit;
+            ToUnit = toUnit;
+            FromUnit_ToUnit = $"{FromUnit}-{ToUnit}";
         }
 
         public enum PressureUnit
@@ -31,96 +21,49 @@ namespace ModernUiDesign.Controls.Converter
             Torr
         }
 
-        public string GetUnswer()
+        public decimal ConvertUnit()
         {
-            Hashtable pressureHashtable = new Hashtable();
-            //Bar to enother unit
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.Pascal}", FromUnitValue * 100000);
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.PSI}", FromUnitValue * 14.504m);
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.Atmosphere}", FromUnitValue / 1.013m);
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.Torr}", FromUnitValue * 750);
-
-            //Pascal to enother unit
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.Bar}", FromUnitValue / 100000);
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.PSI}", FromUnitValue / 6895);
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.Atmosphere}", FromUnitValue / 101325);
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.Torr}", FromUnitValue / 133);
-
-            //PSI to enother unit
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Bar}", FromUnitValue / 14.504m);
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Pascal}", FromUnitValue * 6895);
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Atmosphere}", FromUnitValue / 14.696m);
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Torr}", FromUnitValue * 51.715m);
-
-            //Atmospher to another unit
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Bar}", FromUnitValue * 1.013m);
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Pascal}", FromUnitValue * 101325);
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Pascal}", FromUnitValue * 14.696m);
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Torr}", FromUnitValue * 51.715m);
-
-            //Torr to enither unit
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.Bar}", FromUnitValue / 750);
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.Pascal}", FromUnitValue * 133);
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.PSI}", FromUnitValue / 51.715m);
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.Atmosphere}", FromUnitValue / 760);
-
-
-            if (pressureHashtable.ContainsKey(ResultString))
-            {
-                return pressureHashtable[ResultString].ToString();
-            }
-            else
-            {
-                return "0.error";
-            }
-
+            var pressureDictinary = CreateDictinary();
+            decimal keyIsMatched = 0;
+            pressureDictinary.TryGetValue(FromUnit_ToUnit, out keyIsMatched);
+            return keyIsMatched;
         }
 
-        public decimal GetUnswer(ErrorCall error, string errorText)
+        public Dictionary<string, decimal> CreateDictinary()
         {
-            Hashtable pressureHashtable = new Hashtable();
+            Dictionary<string, decimal> pressureDictinary = new Dictionary<string, decimal>();
+
             //Bar to enother unit
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.Pascal}", FromUnitValue * 100000);
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.PSI}", FromUnitValue * 14.504m);
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.Atmosphere}", FromUnitValue / 1.013m);
-            pressureHashtable.Add($"{PressureUnit.Bar}-{PressureUnit.Torr}", FromUnitValue * 750);
+            pressureDictinary.Add($"{PressureUnit.Bar}-{PressureUnit.Pascal}", FromUnitValue * 100000);
+            pressureDictinary.Add($"{PressureUnit.Bar}-{PressureUnit.PSI}", FromUnitValue * 14.504m);
+            pressureDictinary.Add($"{PressureUnit.Bar}-{PressureUnit.Atmosphere}", FromUnitValue / 1.013m);
+            pressureDictinary.Add($"{PressureUnit.Bar}-{PressureUnit.Torr}", FromUnitValue * 750);
 
             //Pascal to enother unit
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.Bar}", FromUnitValue / 100000);
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.PSI}", FromUnitValue / 6895);
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.Atmosphere}", FromUnitValue / 101325);
-            pressureHashtable.Add($"{PressureUnit.Pascal}-{PressureUnit.Torr}", FromUnitValue / 133);
+            pressureDictinary.Add($"{PressureUnit.Pascal}-{PressureUnit.Bar}", FromUnitValue / 100000);
+            pressureDictinary.Add($"{PressureUnit.Pascal}-{PressureUnit.PSI}", FromUnitValue / 6895);
+            pressureDictinary.Add($"{PressureUnit.Pascal}-{PressureUnit.Atmosphere}", FromUnitValue / 101325);
+            pressureDictinary.Add($"{PressureUnit.Pascal}-{PressureUnit.Torr}", FromUnitValue / 133);
 
             //PSI to enother unit
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Bar}", FromUnitValue / 14.504m);
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Pascal}", FromUnitValue * 6895);
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Atmosphere}", FromUnitValue / 14.696m);
-            pressureHashtable.Add($"{PressureUnit.PSI}-{PressureUnit.Torr}", FromUnitValue * 51.715m);
+            pressureDictinary.Add($"{PressureUnit.PSI}-{PressureUnit.Bar}", FromUnitValue / 14.504m);
+            pressureDictinary.Add($"{PressureUnit.PSI}-{PressureUnit.Pascal}", FromUnitValue * 6895);
+            pressureDictinary.Add($"{PressureUnit.PSI}-{PressureUnit.Atmosphere}", FromUnitValue / 14.696m);
+            pressureDictinary.Add($"{PressureUnit.PSI}-{PressureUnit.Torr}", FromUnitValue * 51.715m);
 
-            //Atmospher to another unit
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Bar}", FromUnitValue * 1.013m);
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Pascal}", FromUnitValue * 101325);
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.PSI}", FromUnitValue * 14.696m);
-            pressureHashtable.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Torr}", FromUnitValue * 760);
+            //Atmospher to other unit
+            pressureDictinary.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Bar}", FromUnitValue * 1.013m);
+            pressureDictinary.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Pascal}", FromUnitValue * 101325);
+            pressureDictinary.Add($"{PressureUnit.Atmosphere}-{PressureUnit.PSI}", FromUnitValue * 14.696m);
+            pressureDictinary.Add($"{PressureUnit.Atmosphere}-{PressureUnit.Torr}", FromUnitValue * 760);
 
             //Torr to enither unit
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.Bar}", FromUnitValue / 750);
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.Pascal}", FromUnitValue * 133.322m);
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.PSI}", FromUnitValue / 51.715m);
-            pressureHashtable.Add($"{PressureUnit.Torr}-{PressureUnit.Atmosphere}", FromUnitValue / 760);
+            pressureDictinary.Add($"{PressureUnit.Torr}-{PressureUnit.Bar}", FromUnitValue / 750);
+            pressureDictinary.Add($"{PressureUnit.Torr}-{PressureUnit.Pascal}", FromUnitValue * 133.322m);
+            pressureDictinary.Add($"{PressureUnit.Torr}-{PressureUnit.PSI}", FromUnitValue / 51.715m);
+            pressureDictinary.Add($"{PressureUnit.Torr}-{PressureUnit.Atmosphere}", FromUnitValue / 760);
 
-
-            if (pressureHashtable.ContainsKey(ResultString))
-            {
-                return (decimal)pressureHashtable[ResultString];
-            }
-            else
-            {
-                error?.Invoke(errorText);
-                return 0;
-            }
-
+            return pressureDictinary;
         }
-
     }
 }
